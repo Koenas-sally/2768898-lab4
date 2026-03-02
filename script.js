@@ -48,3 +48,8 @@ async function searhCountry(countryName){
         spinner.classList.add('hidden');
     }
 }
+
+document.getElementById('search-btn').addEventListener('click', () => {
+    const country = document.getElementById('country-input').value;
+    searchCountry(country);
+});
