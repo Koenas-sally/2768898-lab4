@@ -1,21 +1,21 @@
-const input = document.getElementById('country-input');
+const countryInput = document.getElementById('country-input');
 const searchBtn = document.getElementById('search-btn');
-const spinner = document.getElementById('loading-spinner');
+const loadingSpinner = document.getElementById('loading-spinner');
 const countryInfo = document.getElementById('country-info');
-const bordersSection = document.getElementById('bordering-countries');
+const borderingCountries = document.getElementById('bordering-countries');
 const errorMessage = document.getElementById('error-message');
 
-async function searhCountry(countryName){
+async function searchCountry(countryName){
     try{
         if(!countryName.trim()){
-            throw new Error('Country not found');
+            throw new Error('Please enter a country name');
         }
 
-        spinner.classList.remove('hidden');
+        loadingSpinner.classList.remove('hidden');
         errorMessage.classList.add('hidden');
         countryInfo.classList.add('hidden');
-        bordersSection.classList.add('hidden');
-        bordersSection.innerHTML = '';
+        borderingCountries.classList.add('hidden');
+        borderingCountries.innerHTML = '';
         countryInfo.innerHTML = '';
 
 
@@ -56,38 +56,38 @@ async function searhCountry(countryName){
 
             const borderData = await Promise.all(boarderPromises);
 
-            borderData.fetch(boarderArray =>{
+            borderData.forEach(boarderArray =>{
                 const borderCountry = boarderArray[0];
 
                 const borderDiv = document.createElement('div');
                 borderDiv.innerHTML = `
                     <p>${borderCountry.name.common}</p>
                     <img src="${borderCountry.flags.svg}"
-                        alt="${borderCountry.common.name} flag" width="80">
+                        alt="${borderCountry.name.common} flag" width="80">
                 `;
 
-                bordersSection.appendChild(borderDiv);
+                borderingCountries.appendChild(borderDiv);
             });
 
-            bordersSection.classList.remove('hidden');
+            borderingCountries.classList.remove('hidden');
         }else{
-            bordersSection.innerHTML = "<p>No bordering countries</p>";
-            bordersSection.classList.remove('hidden');
+            borderingCountries.innerHTML = "<p>No bordering countries</p>";
+            borderingCountries.classList.remove('hidden');
         }
     } catch(error){
         errorMessage.textContent = error.message;
         errorMessage.classList.remove('hidden');
     } finally{
-        spinner.classList.add('hidden');
+        loadingSpinner.classList.add('hidden');
     }
 }
 
 searchBtn.addEventListener('click', () => {
-    searchCountry(input.value.trim());
+    searchCountry(countryInput.value.trim());
 });
 
-input.addEventListener('keypress', (e) => {
+countryInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-        searchCountry(input.value.trim());
+        searchCountry(countryInput.value.trim());
     }
 });
